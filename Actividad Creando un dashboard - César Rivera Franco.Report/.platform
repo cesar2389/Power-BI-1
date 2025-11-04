@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Actividad Creando un dashboard - César Rivera Franco"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "0d003ab0-5701-46fe-887d-a26bcba89afc"
+  }
+}

@@ -1,0 +1,152 @@
+table column_year
+	lineageTag: 28dbc427-9e43-4094-b2a3-d687ea5c1368
+
+	measure Quantity = COUNTROWS('column_year')
+		formatString: 0
+		lineageTag: a7e90251-00a2-4d85-94b2-4bc7d66d5fac
+
+	column year_month
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: c11c1877-9100-4352-b253-2d4958043cc7
+		summarizeBy: none
+		sourceColumn: year_month
+
+		variation Variation
+			isDefault
+			relationship: 9b868375-d661-42eb-821a-22dcd26c4463
+			defaultHierarchy: LocalDateTable_1847cd28-421d-47af-8400-b40c70e181d1.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column month_of_release
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: ff1e038b-5374-49a8-8107-c57a2fb34344
+		summarizeBy: none
+		sourceColumn: month_of_release
+
+		variation Variation
+			isDefault
+			relationship: 8456feaf-5f9a-4696-a66c-b2b268b38ee0
+			defaultHierarchy: LocalDateTable_75632403-2d9a-43ec-8fc6-4a20dfdf795c.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column passenger_type
+		dataType: string
+		lineageTag: 640385ee-289a-4fca-a5e7-244f4d02f8f4
+		summarizeBy: none
+		sourceColumn: passenger_type
+
+		annotation SummarizationSetBy = Automatic
+
+	column direction
+		dataType: string
+		lineageTag: 469fe5b4-4966-49c8-9ec8-27154be78e69
+		summarizeBy: none
+		sourceColumn: direction
+
+		annotation SummarizationSetBy = Automatic
+
+	column sex
+		dataType: string
+		lineageTag: 4c5c8ed9-933a-4c2b-9435-82f641b4aafd
+		summarizeBy: none
+		sourceColumn: sex
+
+		annotation SummarizationSetBy = Automatic
+
+	column age
+		dataType: string
+		lineageTag: 4d815363-06b4-4177-bd99-d97b96cb4eef
+		summarizeBy: none
+		sourceColumn: age
+
+		annotation SummarizationSetBy = Automatic
+
+	column estimate
+		dataType: int64
+		formatString: 0
+		lineageTag: a0c47da9-f122-4831-b244-fe2f02277689
+		summarizeBy: sum
+		sourceColumn: estimate
+
+		annotation SummarizationSetBy = Automatic
+
+	column standard_error
+		dataType: int64
+		formatString: 0
+		lineageTag: 1c757ddd-a055-4bf1-b78c-687b354f709d
+		summarizeBy: sum
+		sourceColumn: standard_error
+
+		annotation SummarizationSetBy = Automatic
+
+	column status
+		dataType: string
+		lineageTag: 17cb1cde-d8d1-40a9-bff2-dd3384449e87
+		summarizeBy: none
+		sourceColumn: status
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Text After Delimiter'
+		dataType: string
+		lineageTag: 6c2337e6-c50d-4fe3-b427-7bc881997859
+		summarizeBy: none
+		sourceColumn: Text After Delimiter
+
+		annotation SummarizationSetBy = Automatic
+
+	column year
+		dataType: string
+		lineageTag: c169c1ba-5071-4a8d-bd67-b44365f1e57a
+		summarizeBy: none
+		sourceColumn: year
+
+		annotation SummarizationSetBy = Automatic
+
+	column Ages
+		dataType: string
+		lineageTag: af22a0ef-88ea-4ba7-87bb-6ebc5981cd6a
+		summarizeBy: none
+		sourceColumn: Ages
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Text Before Delimiter'
+		dataType: string
+		lineageTag: a5c38b17-42ea-4957-b07b-3eb8db57f53e
+		summarizeBy: none
+		sourceColumn: Text Before Delimiter
+
+		annotation SummarizationSetBy = Automatic
+
+	partition column_year-07b659b2-dedc-4735-b345-21d43167c0f4 = m
+		mode: import
+		source =
+				let
+				    Source = Csv.Document(File.Contents("C:\Users\Dell\Downloads\NZ march 2020 estimated migration\march-2020-im-estimated-migration-by-age-sex-csv-44.csv"),[Delimiter=",", Columns=9, Encoding=1252, QuoteStyle=QuoteStyle.None]),
+				    #"Promoted Headers" = Table.PromoteHeaders(Source, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"year_month", type date}, {"month_of_release", type date}, {"passenger_type", type text}, {"direction", type text}, {"sex", type text}, {"age", type text}, {"estimate", Int64.Type}, {"standard_error", Int64.Type}, {"status", type text}}),
+				    #"Inserted Text After Delimiter" = Table.AddColumn(#"Changed Type", "Text After Delimiter", each Text.AfterDelimiter(Text.From([year_month], "es-MX"), "/"), type text),
+				    #"Inserted Text After Delimiter1" = Table.AddColumn(#"Inserted Text After Delimiter", "Text After Delimiter.1", each Text.AfterDelimiter([Text After Delimiter], "/"), type text),
+				    #"Renamed Columns" = Table.RenameColumns(#"Inserted Text After Delimiter1",{{"Text After Delimiter.1", "year"}}),
+				    #"Inserted Text Before Delimiter" = Table.AddColumn(#"Renamed Columns", "Text Before Delimiter", each Text.BeforeDelimiter([age], "-"), type text),
+				    #"Renamed Columns1" = Table.RenameColumns(#"Inserted Text Before Delimiter",{{"Text Before Delimiter", "age2"}}),
+				    #"Removed Columns" = Table.RemoveColumns(#"Renamed Columns1",{"age2"}),
+				    #"Inserted Text Before Delimiter1" = Table.AddColumn(#"Removed Columns", "Text Before Delimiter", each Text.BeforeDelimiter([age], "years"), type text),
+				    #"Renamed Columns2" = Table.RenameColumns(#"Inserted Text Before Delimiter1",{{"Text Before Delimiter", "Ages"}}),
+				    #"Inserted Text Before Delimiter2" = Table.AddColumn(#"Renamed Columns2", "Text Before Delimiter", each Text.BeforeDelimiter([Ages], "-"), type text)
+				in
+				    #"Inserted Text Before Delimiter2"
+
+	annotation PBI_ResultType = Table
+
+	annotation PBI_NavigationStepName = Navigation
+

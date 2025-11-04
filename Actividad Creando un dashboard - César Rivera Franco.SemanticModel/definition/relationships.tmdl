@@ -1,0 +1,10 @@
+relationship 9b868375-d661-42eb-821a-22dcd26c4463
+	joinOnDateBehavior: datePartOnly
+	fromColumn: column_year.year_month
+	toColumn: LocalDateTable_1847cd28-421d-47af-8400-b40c70e181d1.Date
+
+relationship 8456feaf-5f9a-4696-a66c-b2b268b38ee0
+	joinOnDateBehavior: datePartOnly
+	fromColumn: column_year.month_of_release
+	toColumn: LocalDateTable_75632403-2d9a-43ec-8fc6-4a20dfdf795c.Date
+
